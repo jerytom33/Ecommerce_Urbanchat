@@ -1,0 +1,12 @@
+{
+  "extends": "@ecommerce/config/typescript/react-native.json",
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*", "app/**/*", "**/*.ts", "**/*.tsx", "app.config.ts"],
+  "exclude": ["node_modules", ".expo"]
+}

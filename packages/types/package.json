@@ -1,0 +1,19 @@
+{
+  "name": "@ecommerce/types",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "lint": "eslint src/",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@ecommerce/config": "workspace:*",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  }
+}

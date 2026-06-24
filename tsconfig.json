@@ -1,0 +1,17 @@
+{
+  "extends": "./packages/config/typescript/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@ecommerce/types": ["./packages/types/src"],
+      "@ecommerce/ui": ["./packages/ui/src"],
+      "@ecommerce/config/*": ["./packages/config/*"]
+    }
+  },
+  "references": [
+    { "path": "./packages/types" },
+    { "path": "./packages/ui" },
+    { "path": "./apps/api" }
+  ],
+  "exclude": ["node_modules", "dist", ".next", "apps/mobile"]
+}

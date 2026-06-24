@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import design tokens */
+@import '@ecommerce/ui/src/styles/tokens.css';
+
+@layer base {
+  body {
+    @apply bg-background text-text font-sans antialiased;
+  }
+}
