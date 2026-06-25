@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { ThemeStyles, getActiveTheme } from '../lib/theme-provider';
 import './globals.css';
 
@@ -21,7 +21,7 @@ export const viewport: Viewport = {
  *
  * Requirements: 14.1, 14.2, 14.3, 14.5, 4.2
  */
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }): Promise<React.ReactElement> {
   const theme = await getActiveTheme();
 
   return (

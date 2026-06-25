@@ -38,6 +38,8 @@ export async function apiRequest<T = unknown>(
   const requestHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
+    'x-tenant-id': 'dc35d0d1-67ad-4fcd-8c03-ff6382ed983d',
+    'ngrok-skip-browser-warning': 'true',
     ...headers,
   };
 

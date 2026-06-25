@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Button, Card, CardContent } from '@ecommerce/ui';
 import Link from 'next/link';
 
@@ -10,7 +10,7 @@ const TENANT_ID = process.env.NEXT_PUBLIC_TENANT_ID || 'dc35d0d1-67ad-4fcd-8c03-
  * Above-the-fold content (hero) renders immediately as a Server Component.
  * Below-the-fold sections stream in via Suspense boundaries.
  */
-export default function StorefrontPage() {
+export default function StorefrontPage(): React.ReactElement {
   return (
     <div className="space-y-12">
       {/* Above-the-fold hero - renders immediately for fast LCP */}

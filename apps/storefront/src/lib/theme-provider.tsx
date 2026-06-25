@@ -8,6 +8,8 @@
  * Requirements: 4.2, 14.1, 14.2
  */
 
+import React from 'react';
+
 export interface ThemeConfig {
   id: string;
   name: string;
@@ -134,7 +136,7 @@ export function generateThemeCSSVariables(theme: ThemeConfig): string {
  * ThemeStyles - Server Component that injects theme CSS variables into the page.
  * Renders as a <style> tag in the <head> for zero-JS theme application.
  */
-export async function ThemeStyles() {
+export async function ThemeStyles(): Promise<React.ReactElement> {
   const theme = await getActiveTheme();
   const cssVariables = generateThemeCSSVariables(theme);
 

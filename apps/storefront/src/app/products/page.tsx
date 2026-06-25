@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Card, CardContent } from '@ecommerce/ui';
 import Link from 'next/link';
 
@@ -9,7 +9,7 @@ const TENANT_ID = process.env.NEXT_PUBLIC_TENANT_ID || 'dc35d0d1-67ad-4fcd-8c03-
  * Product Listing Page - Grid layout with streaming SSR.
  * Fetches real products from the API with Unsplash images.
  */
-export default function ProductsPage() {
+export default function ProductsPage(): React.ReactElement {
   return (
     <div className="space-y-8">
       {/* Above-the-fold: heading renders immediately */}

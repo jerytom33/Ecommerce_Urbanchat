@@ -1,142 +1,154 @@
-import { Suspense } from 'react';
-import { Button, Card, CardContent } from '@ecommerce/ui';
+import React, { Suspense } from 'react';
+import { Card, CardContent } from '@ecommerce/ui';
+import Link from 'next/link';
+import AddToCartButton from '../../../components/AddToCartButton';
 
-/**
- * Product Detail Page - Displays full product information with streaming SSR.
- * Above-the-fold: product image + title render immediately.
- * Below-the-fold: related products stream in.
- *
- * Requirements: 14.1, 14.3
- */
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333';
+const TENANT_ID = process.env.NEXT_PUBLIC_TENANT_ID || 'dc35d0d1-67ad-4fcd-8c03-ff6382ed983d';
+
 export default async function ProductDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
-}) {
+}): Promise<React.ReactElement> {
   const { id } = await params;
+
+  let product: any = null;
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/admin/products/${id}`, {
+      headers: { 'x-tenant-id': TENANT_ID },
+      next: { revalidate: 30 },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      product = json.data;
+    }
+  } catch {}
+
+  if (!product) {
+    return (
+      <div className="text-center py-16">
+        <h1 className="text-2xl font-bold text-text">Product Not Found</h1>
+        <Link href="/products" className="text-primary hover:underline mt-4 inline-block">
+          ← Back to Products
+        </Link>
+      </div>
+    );
+  }
+
+  const imageUrl = product.media?.[0]?.url;
+  const listings = product.listings || [];
+  const mainListing = listings[0];
+  const price = mainListing?.price ? Number(mainListing.price).toFixed(2) : '0.00';
 
   return (
     <div className="space-y-12">
-      {/* Above-the-fold: product details render immediately */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         {/* Product Image */}
-        <div className="aspect-square bg-surface rounded-lg flex items-center justify-center border border-border">
-          <span className="text-muted text-sm">Product Image</span>
+        <div className="aspect-square bg-surface rounded-lg overflow-hidden border border-border">
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={product.title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-muted">
+              No Image
+            </div>
+          )}
         </div>
 
         {/* Product Info */}
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold text-text">Product {id}</h1>
-            <p className="text-2xl font-semibold text-primary mt-2">$49.99</p>
+            <h1 className="text-3xl font-bold text-text">{product.title}</h1>
+            <p className="text-2xl font-semibold text-primary mt-2">${price}</p>
           </div>
 
-          <p className="text-muted leading-relaxed">
-            This is a placeholder product description. In production, this content
-            is fetched from the Storefront API and rendered server-side for SEO.
-          </p>
+          {product.description && (
+            <p className="text-muted leading-relaxed">{product.description}</p>
+          )}
 
-          {/* Variant Selection */}
-          <div className="space-y-4">
+          {/* Variants */}
+          {listings.length > 1 && (
             <div>
-              <label className="block text-sm font-medium text-text mb-2">Size</label>
-              <div className="flex gap-2">
-                {['S', 'M', 'L', 'XL'].map((size) => (
-                  <button
-                    key={size}
-                    className="px-4 py-2 border border-border rounded-md text-sm hover:border-primary hover:text-primary transition-colors"
+              <label className="block text-sm font-medium text-text mb-2">Options</label>
+              <div className="flex flex-wrap gap-2">
+                {listings.map((listing: any) => (
+                  <span
+                    key={listing.id}
+                    className="px-3 py-1.5 border border-border rounded-md text-sm text-text hover:border-primary cursor-pointer"
                   >
-                    {size}
-                  </button>
+                    {listing.sku} — ${Number(listing.price).toFixed(2)}
+                  </span>
                 ))}
               </div>
             </div>
+          )}
 
-            <div>
-              <label className="block text-sm font-medium text-text mb-2">Quantity</label>
-              <select
-                className="px-3 py-2 text-sm border border-border rounded-md bg-background text-text focus:outline-none focus:ring-2 focus:ring-primary/20"
-                defaultValue="1"
-                aria-label="Select quantity"
-              >
-                {[1, 2, 3, 4, 5].map((qty) => (
-                  <option key={qty} value={qty}>{qty}</option>
-                ))}
-              </select>
-            </div>
+          {/* Stock Status */}
+          <div>
+            {mainListing?.inventoryQuantity > 0 ? (
+              <p className="text-sm text-success font-medium">
+                ✓ In Stock ({mainListing.inventoryQuantity} available)
+              </p>
+            ) : (
+              <p className="text-sm text-error font-medium">Out of Stock</p>
+            )}
           </div>
 
           {/* Add to Cart */}
-          <div className="flex gap-3">
-            <Button variant="primary" size="lg" className="flex-1">
-              Add to Cart
-            </Button>
-            <Button variant="outline" size="lg">
-              ♥
-            </Button>
-          </div>
+          {mainListing && (
+            <AddToCartButton listingId={mainListing.id} />
+          )}
 
-          {/* Product Meta */}
-          <div className="border-t border-border pt-4 space-y-2">
-            <p className="text-sm text-muted">SKU: PROD-{id}-001</p>
-            <p className="text-sm text-muted">Category: General</p>
-            <p className="text-sm text-success font-medium">In Stock</p>
+          {/* Meta */}
+          <div className="border-t border-border pt-4 space-y-1 text-sm text-muted">
+            {mainListing?.sku && <p>SKU: {mainListing.sku}</p>}
+            <p>Status: {product.status}</p>
           </div>
         </div>
       </div>
 
-      {/* Related products stream in via Suspense */}
-      <Suspense fallback={<RelatedProductsSkeleton />}>
-        <RelatedProducts />
+      {/* Related products */}
+      <Suspense fallback={null}>
+        <RelatedProducts currentId={id} />
       </Suspense>
     </div>
   );
 }
 
-async function RelatedProducts() {
-  const products = Array.from({ length: 4 }, (_, i) => ({
-    id: `related-${i + 1}`,
-    title: `Related Product ${i + 1}`,
-    price: ((i + 1) * 24.99).toFixed(2),
-  }));
+async function RelatedProducts({ currentId }: { currentId: string }) {
+  let products: any[] = [];
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/admin/products?limit=4&status=active`, {
+      headers: { 'x-tenant-id': TENANT_ID },
+      next: { revalidate: 60 },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      products = (json.data || []).filter((p: any) => p.id !== currentId).slice(0, 4);
+    }
+  } catch {}
+
+  if (products.length === 0) return null;
 
   return (
     <section>
       <h2 className="text-2xl font-bold text-text mb-6">You May Also Like</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <a key={product.id} href={`/products/${product.id}`} className="group">
-            <Card padding="none" className="overflow-hidden transition-shadow group-hover:shadow-md">
-              <div className="aspect-square bg-surface flex items-center justify-center">
-                <span className="text-muted text-sm">No Image</span>
-              </div>
+        {products.map((p) => (
+          <Link key={p.id} href={`/products/${p.id}`} className="group">
+            <Card padding="none" className="overflow-hidden group-hover:shadow-md transition-shadow">
+              <div className="aspect-square bg-surface" />
               <CardContent>
-                <h3 className="font-medium text-text group-hover:text-primary transition-colors">
-                  {product.title}
-                </h3>
-                <p className="text-sm text-muted mt-1">${product.price}</p>
+                <p className="font-medium text-text group-hover:text-primary transition-colors line-clamp-1">
+                  {p.title}
+                </p>
               </CardContent>
             </Card>
-          </a>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function RelatedProductsSkeleton() {
-  return (
-    <section>
-      <div className="h-8 w-48 bg-surface rounded animate-pulse mb-6" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="rounded-lg border border-border overflow-hidden animate-pulse">
-            <div className="aspect-square bg-surface" />
-            <div className="p-4 space-y-2">
-              <div className="h-4 bg-surface rounded w-3/4" />
-              <div className="h-4 bg-surface rounded w-1/4" />
-            </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

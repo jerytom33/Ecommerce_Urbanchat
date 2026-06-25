@@ -1,8 +1,10 @@
+import React from 'react';
+
 /**
  * Root loading state for the storefront.
  * This shows during route transitions while streaming SSR data loads.
  */
-export default function Loading() {
+export default function Loading(): React.ReactElement {
   return (
     <div className="space-y-12 animate-pulse">
       {/* Hero skeleton */}

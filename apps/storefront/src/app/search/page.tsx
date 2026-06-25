@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Input, Button, Card, CardContent } from '@ecommerce/ui';
 
 /**
@@ -8,7 +8,7 @@ import { Input, Button, Card, CardContent } from '@ecommerce/ui';
  *
  * Requirements: 14.1, 14.3
  */
-export default function SearchPage() {
+export default function SearchPage(): React.ReactElement {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Above-the-fold: search input renders immediately */}

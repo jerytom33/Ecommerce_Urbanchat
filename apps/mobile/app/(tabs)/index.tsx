@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   FlatList,
   TouchableOpacity,
@@ -22,9 +23,10 @@ import { useTheme } from '@/providers/ThemeProvider';
 interface Product {
   id: string;
   title: string;
-  price: number;
-  imageUrl?: string;
+  description?: string;
   status: string;
+  listings?: Array<{ price: string }>;
+  media?: Array<{ url: string }>;
 }
 
 export default function HomeScreen() {
@@ -37,17 +39,27 @@ export default function HomeScreen() {
 
   const fetchProducts = useCallback(async () => {
     setError(null);
-    const response = await api.get<{ products: Product[] } | Product[]>(
-      'products?status=active&limit=10'
-    );
+    // Fetch product list
+    const response = await api.get<{ data: any[] }>('products?status=active&limit=10');
     if (response.error) {
       setError(response.error);
-    } else if (response.data) {
-      const list = Array.isArray(response.data)
-        ? response.data
-        : response.data.products || [];
-      setProducts(list);
+      return;
     }
+    if (!response.data) return;
+
+    const productList = (response.data as any).data || response.data || [];
+
+    // Fetch details (with media/listings) for each product
+    const detailed = await Promise.all(
+      productList.slice(0, 10).map(async (p: any) => {
+        const detail = await api.get<{ data: Product }>(`products/${p.id}`);
+        if (detail.data) {
+          return (detail.data as any).data || detail.data;
+        }
+        return p;
+      })
+    );
+    setProducts(detailed);
   }, []);
 
   useEffect(() => {
@@ -65,53 +77,69 @@ export default function HomeScreen() {
     router.push(`/product/${id}`);
   };
 
-  const renderProductCard = ({ item }: { item: Product }) => (
-    <TouchableOpacity
-      style={[styles.productCard, { borderColor: theme.colors.border }]}
-      onPress={() => navigateToProduct(item.id)}
-      accessibilityRole="button"
-      accessibilityLabel={`${item.title}, $${item.price.toFixed(2)}`}
-    >
-      <View
-        style={[
-          styles.productImage,
-          { backgroundColor: theme.colors.surface },
-        ]}
+  const renderProductCard = ({ item }: { item: Product }) => {
+    const price = item.listings?.[0]?.price ? Number(item.listings[0].price) : 0;
+    const imageUrl = item.media?.[0]?.url;
+    return (
+      <TouchableOpacity
+        style={[styles.productCard, { borderColor: theme.colors.border }]}
+        onPress={() => navigateToProduct(item.id)}
+        accessibilityRole="button"
+        accessibilityLabel={`${item.title}, $${price.toFixed(2)}`}
       >
-        <Text style={styles.imagePlaceholder}>📷</Text>
-      </View>
-      <Text style={[styles.productTitle, { color: theme.colors.text }]} numberOfLines={2}>
-        {item.title}
-      </Text>
-      <Text style={[styles.productPrice, { color: theme.colors.primary }]}>
-        ${item.price.toFixed(2)}
-      </Text>
-    </TouchableOpacity>
-  );
+        <View
+          style={[
+            styles.productImage,
+            { backgroundColor: theme.colors.surface },
+          ]}
+        >
+          {imageUrl ? (
+            <Image source={{ uri: imageUrl }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+          ) : (
+            <Text style={styles.imagePlaceholder}>📷</Text>
+          )}
+        </View>
+        <Text style={[styles.productTitle, { color: theme.colors.text }]} numberOfLines={2}>
+          {item.title}
+        </Text>
+        <Text style={[styles.productPrice, { color: theme.colors.primary }]}>
+          ${price.toFixed(2)}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
-  const renderGridCard = ({ item }: { item: Product }) => (
-    <TouchableOpacity
-      style={[styles.gridCard, { borderColor: theme.colors.border }]}
-      onPress={() => navigateToProduct(item.id)}
-      accessibilityRole="button"
-      accessibilityLabel={`${item.title}, $${item.price.toFixed(2)}`}
-    >
-      <View
-        style={[
-          styles.gridImage,
-          { backgroundColor: theme.colors.surface },
-        ]}
+  const renderGridCard = ({ item }: { item: Product }) => {
+    const price = item.listings?.[0]?.price ? Number(item.listings[0].price) : 0;
+    const imageUrl = item.media?.[0]?.url;
+    return (
+      <TouchableOpacity
+        style={[styles.gridCard, { borderColor: theme.colors.border }]}
+        onPress={() => navigateToProduct(item.id)}
+        accessibilityRole="button"
+        accessibilityLabel={`${item.title}, $${price.toFixed(2)}`}
       >
-        <Text style={styles.imagePlaceholder}>📷</Text>
-      </View>
-      <Text style={[styles.productTitle, { color: theme.colors.text }]} numberOfLines={2}>
-        {item.title}
-      </Text>
-      <Text style={[styles.productPrice, { color: theme.colors.primary }]}>
-        ${item.price.toFixed(2)}
-      </Text>
-    </TouchableOpacity>
-  );
+        <View
+          style={[
+            styles.gridImage,
+            { backgroundColor: theme.colors.surface },
+          ]}
+        >
+          {imageUrl ? (
+            <Image source={{ uri: imageUrl }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+          ) : (
+            <Text style={styles.imagePlaceholder}>📷</Text>
+          )}
+        </View>
+        <Text style={[styles.productTitle, { color: theme.colors.text }]} numberOfLines={2}>
+          {item.title}
+        </Text>
+        <Text style={[styles.productPrice, { color: theme.colors.primary }]}>
+          ${price.toFixed(2)}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   if (loading) {
     return (

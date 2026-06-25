@@ -35,7 +35,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     storefrontApiBaseUrl:
       process.env.EXPO_PUBLIC_STOREFRONT_API_URL ||
-      'http://localhost:3333/api/v1/storefront/',
+      'https://ashlie-nonnoumenal-unpompously.ngrok-free.dev/api/v1/admin/',
   },
   experiments: {
     typedRoutes: true,
