@@ -12,6 +12,14 @@ export default function RootLayout() {
     <ThemeProvider>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen
+          name="product/[id]"
+          options={{ headerShown: true, title: 'Product' }}
+        />
+        <Stack.Screen
+          name="checkout"
+          options={{ headerShown: true, title: 'Checkout', presentation: 'modal' }}
+        />
       </Stack>
     </ThemeProvider>
   );

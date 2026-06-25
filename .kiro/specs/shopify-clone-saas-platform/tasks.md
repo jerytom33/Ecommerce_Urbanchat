@@ -327,7 +327,7 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
   - Ensure all tests pass for promotions, CRM, search, assets, fulfillment, and analytics.
   - Ask the user if questions arise.
 
-- [ ] 15. Admin Panel UI
+- [x] 15. Admin Panel UI
   - [x] 15.1 Implement admin layout shell and navigation
     - Create responsive sidebar navigation with sections: Dashboard, Products, Orders, Customers, Marketing, Themes, Settings
     - Implement design token system with CSS variables + Tailwind
@@ -335,7 +335,7 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Ensure responsive from 320px to 2560px viewport
     - _Requirements: 29.1, 29.2, 29.5, 29.6_
 
-  - [ ] 15.2 Implement product management pages
+  - [x] 15.2 Implement product management pages
     - Create product list page with pagination and search
     - Create product create/edit form with listing management
     - Create category management page with tree view
@@ -343,41 +343,41 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Show field-level validation errors, preserve form data on failures
     - _Requirements: 3.1, 3.5, 3.6, 29.6, 29.7_
 
-  - [ ] 15.3 Implement order management pages
+  - [x] 15.3 Implement order management pages
     - Create order list with status filters and search
     - Create order detail page with line items, fulfillment actions
     - Implement fulfillment workflow: mark shipped, add tracking, partial fulfill
     - Display notification log per order
     - _Requirements: 16.1, 16.2, 16.5, 29.6_
 
-  - [ ] 15.4 Implement customer management and CRM pages
+  - [x] 15.4 Implement customer management and CRM pages
     - Create customer list with search and filters
     - Create customer detail page showing profile, order history, engagement metrics
     - Implement customer tagging and segment builder UI
     - _Requirements: 6.2, 6.7, 29.6_
 
-  - [ ] 15.5 Implement theme management and marketing pages
+  - [x] 15.5 Implement theme management and marketing pages
     - Create theme gallery showing 3 available themes with live preview
     - Create theme customization panel (colors, fonts, layout)
     - Create promotions/discounts management page
     - Create marketing email campaign page (logs to notification panel for prototype)
     - _Requirements: 4.1, 4.3, 23.1, 36.3_
 
-  - [ ] 15.6 Implement settings and billing pages
+  - [x] 15.6 Implement settings and billing pages
     - Create store settings page (name, subdomain, branding assets)
     - Create billing page showing current plan, upgrade/downgrade
     - Create staff management page with invite flow
     - Create webhook endpoint management page
     - _Requirements: 1.5, 22.7, 21.8, 28.1_
 
-  - [ ] 15.7 Implement analytics dashboard UI
+  - [x] 15.7 Implement analytics dashboard UI
     - Create dashboard page with revenue chart, conversion rate, AOV, top products
     - Add date range selector (1 day to 13 months)
     - Display visitor count and active cart metrics
     - Add report export button (CSV/PDF)
     - _Requirements: 27.2, 27.3, 27.5, 27.8_
 
-- [ ] 16. Web Storefront UI
+- [x] 16. Web Storefront UI
   - [x] 16.1 Implement storefront layout with theme rendering
     - Create responsive storefront shell consuming theme configuration
     - Implement streaming SSR with Next.js App Router
@@ -385,14 +385,14 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Optimize for LCP <2.5s, TTI <3.5s, CLS <0.1 on simulated 4G
     - _Requirements: 14.1, 14.2, 14.3, 14.5, 4.2_
 
-  - [ ] 16.2 Implement product browsing and search UI
+  - [x] 16.2 Implement product browsing and search UI
     - Create product listing page with faceted filters (category, price, availability)
     - Create product detail page with variant selection, image gallery, add-to-cart
     - Implement search bar with autocomplete (2+ chars, max 10 suggestions)
     - Serve responsive images in WebP/AVIF with srcset (320-1920px)
     - _Requirements: 17.1, 17.2, 17.5, 14.6_
 
-  - [ ] 16.3 Implement cart and checkout UI
+  - [x] 16.3 Implement cart and checkout UI
     - Create cart drawer/page showing line items with quantity adjustment
     - Create checkout flow: shipping address → shipping method → payment → confirmation
     - Display itemized summary with tax, shipping, discounts
@@ -400,15 +400,15 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Show coupon code input with inline validation feedback
     - _Requirements: 7.1, 7.3, 7.7, 23.3_
 
-  - [ ] 16.4 Implement accessibility and keyboard navigation
+  - [x] 16.4 Implement accessibility and keyboard navigation
     - Ensure all interactive elements have visible focus indicators
     - Implement full keyboard navigation across all pages
     - Add ARIA labels, roles, and landmarks
     - Validate WCAG 2.1 Level AA compliance with automated scanning
     - _Requirements: 14.4, 14.7_
 
-- [ ] 17. Mobile whitelabel preview (prototype)
-  - [ ] 17.1 Implement mobile storefront screens
+- [x] 17. Mobile whitelabel preview (prototype)
+  - [x] 17.1 Implement mobile storefront screens
     - Create home screen with featured products and theme branding
     - Create product listing/detail screens consuming Storefront API
     - Create cart screen with quantity adjustment and checkout trigger
@@ -416,20 +416,20 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Create account screen with order history
     - _Requirements: 10.4, 36.5_
 
-  - [ ] 17.2 Implement branding asset injection for whitelabel preview
+  - [x] 17.2 Implement branding asset injection for whitelabel preview
     - Create branding configuration screen in admin (logo, colors, app name, splash)
     - Validate: logo PNG/SVG ≤2MB 512×512+, app name 3-30 chars, ≤6 colors, splash ≤5MB
     - Inject branding assets into pre-compiled app shell for Expo simulator preview
     - Display branded app on device simulator with merchant logo, colors, store name
     - _Requirements: 10.1, 10.2, 36.4, 36.9_
 
-  - [ ] 17.3 Implement offline handling and cached data display
+  - [x] 17.3 Implement offline handling and cached data display
     - Cache previously loaded product data for offline display
     - Show connectivity error indicator within 5 seconds of connection failure
     - Resume normal operation when connectivity is restored
     - _Requirements: 10.5_
 
-- [ ] 18. Seed data for investor demo
+- [x] 18. Seed data for investor demo
   - [x] 18.1 Create seed data script with demo merchants and products
     - Create 2 distinct merchant stores with unique themes and branding
     - Seed 20 products per store with listings, images, categories, and variants
@@ -438,7 +438,7 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Include sample promotions/discount codes
     - _Requirements: 36.1, 36.2, 36.5, 36.6, 36.18_
 
-  - [ ] 18.2 Create investor demo walkthrough script
+  - [x] 18.2 Create investor demo walkthrough script
     - Script the 5-minute merchant onboarding journey (registration → storefront preview)
     - Script product creation with 3 listings including images and variants
     - Script theme switching across 3 themes in real-time
