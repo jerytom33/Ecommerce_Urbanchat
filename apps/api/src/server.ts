@@ -3,7 +3,7 @@ import cors from '@fastify/cors';
 import { randomUUID } from 'node:crypto';
 import { config } from './config.js';
 import { errorHandlerPlugin } from './plugins/error-handler.js';
-import { healthRoutes, adminRoutes, storefrontRoutes, authRoutes } from './routes/index.js';
+import { healthRoutes, adminRoutes, storefrontRoutes, authRoutes, publicAssetRoutes } from './routes/index.js';
 
 export interface ServerOptions {
   logger?: boolean;
@@ -47,6 +47,7 @@ export async function buildServer(options: ServerOptions = {}): Promise<FastifyI
   await fastify.register(authRoutes, { prefix: '/api/v1/auth' });
   await fastify.register(adminRoutes, { prefix: '/api/v1/admin' });
   await fastify.register(storefrontRoutes, { prefix: '/api/v1/storefront' });
+  await fastify.register(publicAssetRoutes, { prefix: '/api/v1/assets' });
 
   return fastify;
 }

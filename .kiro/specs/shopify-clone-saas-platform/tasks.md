@@ -166,13 +166,13 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Render preview within 5 seconds, publish within 10 seconds
     - _Requirements: 4.1, 4.7_
 
-  - [ ] 5.3 Implement theme customization persistence
+  - [x] 5.3 Implement theme customization persistence
     - Create `PUT /api/v1/admin/themes/customize` saving overlay properties
     - Preserve merchant customizations when base theme updates (overlay pattern)
     - Support colors, fonts, and layout sections as customizable properties
     - _Requirements: 4.3, 4.4_
 
-  - [ ] 5.4 Implement theme rendering in storefront
+  - [x] 5.4 Implement theme rendering in storefront
     - Create React-based dynamic theme renderer consuming theme config
     - Load theme modules independently (dynamic imports)
     - Apply CSS variables from theme config for consistent branding
@@ -192,7 +192,7 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - **Property 6: Cart Constraint Enforcement**
     - **Validates: Requirements 7.1**
 
-  - [ ] 6.3 Implement checkout flow with price calculation
+  - [x] 6.3 Implement checkout flow with price calculation
     - Create `POST /api/v1/storefront/checkout/initiate`
     - Calculate subtotal = Σ(unit_price × quantity) for all line items
     - Calculate tax (flat rate for prototype), shipping (flat rate for prototype)
@@ -204,7 +204,7 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - **Property 7: Checkout Price Arithmetic**
     - **Validates: Requirements 7.3**
 
-  - [ ] 6.5 Implement simulated payment gateway
+  - [x] 6.5 Implement simulated payment gateway
     - Create `POST /api/v1/storefront/checkout/pay` with simulated payment processing
     - Accept test card numbers, always return success for valid format
     - On success: decrement inventory atomically, create order record, return confirmation
@@ -212,7 +212,7 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Send confirmation within 5 seconds of successful payment
     - _Requirements: 7.4, 7.5, 7.6, 36.8_
 
-  - [ ] 6.6 Implement order creation and order data model
+  - [x] 6.6 Implement order creation and order data model
     - Create `orders` table with status, totals, currency, shipping/billing address
     - Create `order_line_items` table with quantity, unit_price, fulfillment_status
     - Create `POST /api/v1/admin/orders` (list), `GET /api/v1/admin/orders/:id`
@@ -230,7 +230,7 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Add usage limits (total redemptions, per-customer)
     - _Requirements: 23.1, 23.4_
 
-  - [ ] 8.2 Implement coupon validation and discount application
+  - [x] 8.2 Implement coupon validation and discount application
     - Create `POST /api/v1/storefront/cart/apply-coupon` endpoint
     - Validate coupon code: case-insensitive, 3-32 alphanumeric characters
     - Check eligibility: min cart value, specific products, date ranges, usage limits
@@ -254,14 +254,14 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Update profile metrics after each order: increment total_orders, update total_spend, calculate AOV
     - _Requirements: 6.1, 6.7_
 
-  - [ ] 9.2 Implement customer list and search API
+  - [x] 9.2 Implement customer list and search API
     - Create `GET /api/v1/admin/customers` with pagination (50 per page)
     - Support search by name and email
     - Support filters: order frequency, total spend range, last purchase date, tags
     - Return engagement metrics on each profile
     - _Requirements: 6.2, 6.7_
 
-  - [ ] 9.3 Implement customer tagging and segment actions
+  - [x] 9.3 Implement customer tagging and segment actions
     - Create `POST /api/v1/admin/customers/:id/tags` for tagging
     - Create `POST /api/v1/admin/segments` for defining customer segments
     - Log segment actions (email triggers, discount assignments) to admin panel for prototype
@@ -275,15 +275,15 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Support autocomplete after 2+ characters (max 10 suggestions, <200ms)
     - _Requirements: 17.1, 17.4, 17.5, 17.8_
 
-  - [ ] 10.2 Implement faceted filtering
+  - [x] 10.2 Implement faceted filtering
     - Support filters: category, price range, availability, custom attributes
     - Combine multiple filters with AND logic (max 10 simultaneous)
     - Return empty result set with zero count for no matches (no error)
     - Reject empty/whitespace-only queries with validation error
     - _Requirements: 17.2, 17.6, 17.7_
 
-- [ ] 11. Asset management (local filesystem for prototype)
-  - [ ] 11.1 Implement file upload with local storage
+- [x] 11. Asset management (local filesystem for prototype)
+  - [x] 11.1 Implement file upload with local storage
     - Create `POST /api/v1/admin/assets/upload` accepting multipart file
     - Validate formats: JPEG, PNG, WebP, AVIF, MP4, WebM, PDF (max 50MB)
     - Store files in local filesystem organized by tenant_id prefix
@@ -291,15 +291,15 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Return reject with error for unsupported format or oversized files
     - _Requirements: 25.1, 25.2, 25.3, 25.5, 36.10_
 
-  - [ ] 11.2 Implement asset serving and transformation
+  - [x] 11.2 Implement asset serving and transformation
     - Create `GET /api/v1/assets/:id` serving files from local storage
     - Support resize/crop query parameters (1-4096px per side)
     - Return transformed image within 3 seconds
     - Set cache-control headers for 30-day caching
     - _Requirements: 25.4, 25.7_
 
-- [ ] 12. Order fulfillment and notifications (prototype - logged to admin)
-  - [ ] 12.1 Implement fulfillment status management
+- [x] 12. Order fulfillment and notifications (prototype - logged to admin)
+  - [x] 12.1 Implement fulfillment status management
     - Create `PUT /api/v1/admin/orders/:id/fulfill` with status transitions
     - Support statuses: pending, processing, shipped, delivered, returned, cancelled
     - Validate allowed status transitions (configurable per merchant)
@@ -307,15 +307,15 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - Record carrier name and tracking number per fulfillment group
     - _Requirements: 16.1, 16.2, 16.4, 16.5_
 
-  - [ ] 12.2 Implement notification logging to admin panel (prototype)
+  - [x] 12.2 Implement notification logging to admin panel (prototype)
     - Create `notifications` table storing notification content
     - Log shipping notifications, status change notifications to admin panel
     - Display notification log in admin UI for merchant review
     - Retry logic placeholder (3 retries with backoff, log on final failure)
     - _Requirements: 16.1, 16.3, 16.6, 16.7, 36.14_
 
-- [ ] 13. Analytics (pre-seeded demo data)
-  - [ ] 13.1 Create analytics dashboard with pre-seeded data
+- [x] 13. Analytics (pre-seeded demo data)
+  - [x] 13.1 Create analytics dashboard with pre-seeded data
     - Create analytics tables for page_views, product_views, add_to_cart, purchases
     - Seed demo analytics data showing revenue, conversion rate, AOV, top products
     - Create `GET /api/v1/admin/analytics/dashboard` returning pre-seeded metrics
@@ -328,7 +328,7 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
   - Ask the user if questions arise.
 
 - [ ] 15. Admin Panel UI
-  - [ ] 15.1 Implement admin layout shell and navigation
+  - [x] 15.1 Implement admin layout shell and navigation
     - Create responsive sidebar navigation with sections: Dashboard, Products, Orders, Customers, Marketing, Themes, Settings
     - Implement design token system with CSS variables + Tailwind
     - Add loading indicators within 200ms of user actions
@@ -378,7 +378,7 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - _Requirements: 27.2, 27.3, 27.5, 27.8_
 
 - [ ] 16. Web Storefront UI
-  - [ ] 16.1 Implement storefront layout with theme rendering
+  - [x] 16.1 Implement storefront layout with theme rendering
     - Create responsive storefront shell consuming theme configuration
     - Implement streaming SSR with Next.js App Router
     - Configure CSS variables from active theme for branding
@@ -430,7 +430,7 @@ Technology stack: TypeScript (Next.js 15, Fastify, React Native/Expo), Go (perfo
     - _Requirements: 10.5_
 
 - [ ] 18. Seed data for investor demo
-  - [ ] 18.1 Create seed data script with demo merchants and products
+  - [x] 18.1 Create seed data script with demo merchants and products
     - Create 2 distinct merchant stores with unique themes and branding
     - Seed 20 products per store with listings, images, categories, and variants
     - Create sample customers with order histories and engagement metrics

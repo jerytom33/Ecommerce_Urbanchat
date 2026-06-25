@@ -5,6 +5,9 @@ import { listingProductRoutes, listingRoutes } from './listings.js';
 import { customerRoutes } from './customers.js';
 import { themeRoutes } from './themes.js';
 import { promotionRoutes } from './promotions.js';
+import { assetRoutes } from './assets.js';
+import { fulfillmentRoutes } from './fulfillment.js';
+import { orderRoutes } from './orders.js';
 
 /**
  * Admin API routes registered under /api/v1/admin/
@@ -35,4 +38,13 @@ export async function adminRoutes(fastify: FastifyInstance): Promise<void> {
 
   // Promotion management routes
   await fastify.register(promotionRoutes, { prefix: '/promotions' });
+
+  // Asset management routes
+  await fastify.register(assetRoutes, { prefix: '/assets' });
+
+  // Fulfillment management routes (nested under orders)
+  await fastify.register(fulfillmentRoutes, { prefix: '/orders' });
+
+  // Order management routes (list, get details)
+  await fastify.register(orderRoutes, { prefix: '/orders' });
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { Sidebar } from './components/Sidebar';
 
 export const metadata: Metadata = {
   title: 'Admin Panel - E-commerce Platform',
@@ -11,21 +12,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="min-h-screen bg-background text-text font-sans antialiased">
         <div className="flex min-h-screen">
-          {/* Sidebar placeholder for admin navigation */}
-          <aside className="hidden lg:flex lg:w-64 lg:flex-col border-r border-border bg-surface">
-            <div className="flex h-16 items-center px-6 border-b border-border">
-              <span className="text-lg font-semibold text-primary">Admin</span>
-            </div>
-            <nav className="flex-1 px-4 py-4" aria-label="Main navigation">
-              {/* Navigation items will be added in subsequent tasks */}
-            </nav>
-          </aside>
+          <Sidebar />
           {/* Main content area */}
-          <main className="flex-1 flex flex-col">
-            <header className="h-16 border-b border-border bg-background flex items-center px-6">
-              {/* Top bar content will be added in subsequent tasks */}
+          <main className="flex-1 flex flex-col min-w-0 lg:ml-0">
+            <header className="h-16 border-b border-border bg-background flex items-center px-6 shrink-0">
+              {/* Spacer for mobile hamburger button */}
+              <div className="lg:hidden w-10" />
+              <h1 className="text-lg font-semibold text-text">Admin Panel</h1>
             </header>
-            <div className="flex-1 p-6">
+            <div className="flex-1 p-4 sm:p-6 overflow-auto">
               {children}
             </div>
           </main>

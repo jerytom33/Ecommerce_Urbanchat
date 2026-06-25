@@ -10,3 +10,12 @@
     @apply bg-background text-text font-sans antialiased;
   }
 }
+
+/* Mobile menu :target-based toggle for zero-JS progressive enhancement */
+#mobile-menu {
+  display: none;
+}
+
+#mobile-menu:target {
+  display: flex;
+}

@@ -3,6 +3,7 @@ import { storefrontPromotionRoutes } from './promotions.js';
 import { searchRoutes } from './search.js';
 import { productSearchRoutes } from './product-search.js';
 import { cartRoutes } from './cart.js';
+import { checkoutRoutes } from './checkout.js';
 
 /**
  * Storefront API routes registered under /api/v1/storefront/
@@ -15,6 +16,9 @@ export async function storefrontRoutes(fastify: FastifyInstance): Promise<void> 
 
   // Cart routes
   await fastify.register(cartRoutes, { prefix: '/cart' });
+
+  // Checkout routes
+  await fastify.register(checkoutRoutes, { prefix: '/checkout' });
 
   // Promotion/coupon routes (includes /cart/apply-coupon)
   await fastify.register(storefrontPromotionRoutes);
