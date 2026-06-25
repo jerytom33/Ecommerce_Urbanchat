@@ -6,7 +6,7 @@ export const config = {
   host: process.env.API_HOST || '0.0.0.0',
   env: process.env.NODE_ENV || 'development',
   cors: {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:8081',
   },
   database: {
     url: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/ecommerce_prototype',

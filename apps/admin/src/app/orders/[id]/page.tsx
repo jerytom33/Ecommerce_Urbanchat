@@ -84,8 +84,8 @@ const FULFILLMENT_COLORS: Record<string, string> = {
   delivered: 'bg-green-100 text-green-800',
 };
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-const TENANT_ID = process.env.NEXT_PUBLIC_TENANT_ID || 'demo-tenant';
+const API_BASE = 'http://localhost:3333';
+const TENANT_ID = 'dc35d0d1-67ad-4fcd-8c03-ff6382ed983d';
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
