@@ -1,31 +1,20 @@
 import { Suspense } from 'react';
 import { Card, CardContent } from '@ecommerce/ui';
+import Link from 'next/link';
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const TENANT_ID = process.env.NEXT_PUBLIC_TENANT_ID || 'dc35d0d1-67ad-4fcd-8c03-ff6382ed983d';
 
 /**
  * Product Listing Page - Grid layout with streaming SSR.
- * Above-the-fold: page title and filter controls render immediately.
- * Below-the-fold: product grid streams in via Suspense.
- *
- * Requirements: 14.1, 14.3
+ * Fetches real products from the API with Unsplash images.
  */
 export default function ProductsPage() {
   return (
     <div className="space-y-8">
-      {/* Above-the-fold: heading + filters render immediately */}
+      {/* Above-the-fold: heading renders immediately */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-3xl font-bold text-text">All Products</h1>
-        <div className="flex items-center gap-3">
-          <select
-            className="px-3 py-2 text-sm border border-border rounded-md bg-background text-text focus:outline-none focus:ring-2 focus:ring-primary/20"
-            aria-label="Sort products"
-            defaultValue="featured"
-          >
-            <option value="featured">Featured</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="newest">Newest</option>
-          </select>
-        </div>
       </div>
 
       {/* Product grid streams in via Suspense */}
@@ -37,44 +26,80 @@ export default function ProductsPage() {
 }
 
 /**
- * Product grid - Server Component that fetches and renders product cards.
- * In production, fetches from the Storefront API with pagination.
+ * Product grid - Server Component that fetches real products from the API.
  */
 async function ProductGrid() {
-  // Placeholder product data; in production, fetched via GraphQL from Storefront API
-  const products = Array.from({ length: 12 }, (_, i) => ({
-    id: `prod-${i + 1}`,
-    title: `Product ${i + 1}`,
-    price: ((i + 1) * 19.99).toFixed(2),
-    image: null as string | null,
-  }));
+  let products: any[] = [];
+
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/admin/products?limit=20&status=active`, {
+      headers: { 'x-tenant-id': TENANT_ID },
+      next: { revalidate: 60 },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      products = json.data || [];
+    }
+  } catch {}
+
+  // Fetch full details (with media) for each product
+  const productsWithMedia = await Promise.all(
+    products.map(async (product) => {
+      try {
+        const res = await fetch(`${API_BASE}/api/v1/admin/products/${product.id}`, {
+          headers: { 'x-tenant-id': TENANT_ID },
+          next: { revalidate: 60 },
+        });
+        if (res.ok) {
+          const json = await res.json();
+          return json.data;
+        }
+      } catch {}
+      return { ...product, media: [], listings: [] };
+    })
+  );
+
+  if (productsWithMedia.length === 0) {
+    return (
+      <div className="text-center py-16">
+        <p className="text-lg text-muted">No products found.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {products.map((product) => (
-        <a key={product.id} href={`/products/${product.id}`} className="group">
-          <Card padding="none" className="overflow-hidden transition-shadow group-hover:shadow-md">
-            <div className="aspect-square bg-surface flex items-center justify-center">
-              {product.image ? (
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="object-cover w-full h-full"
-                  loading="lazy"
-                />
-              ) : (
-                <span className="text-muted text-sm">No Image</span>
-              )}
-            </div>
-            <CardContent>
-              <h3 className="font-medium text-text group-hover:text-primary transition-colors line-clamp-2">
-                {product.title}
-              </h3>
-              <p className="text-sm text-muted mt-1">${product.price}</p>
-            </CardContent>
-          </Card>
-        </a>
-      ))}
+      {productsWithMedia.map((product) => {
+        const imageUrl = product.media?.[0]?.url;
+        const price = product.listings?.[0]?.price || '0.00';
+        return (
+          <Link key={product.id} href={`/products/${product.id}`} className="group">
+            <Card padding="none" className="overflow-hidden transition-shadow group-hover:shadow-lg">
+              <div className="aspect-square bg-surface relative overflow-hidden">
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt={product.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-muted">
+                    No Image
+                  </div>
+                )}
+              </div>
+              <CardContent>
+                <h3 className="font-medium text-text group-hover:text-primary transition-colors line-clamp-2">
+                  {product.title}
+                </h3>
+                <p className="text-sm text-muted mt-1 line-clamp-1">{product.description}</p>
+                <p className="text-sm font-semibold text-primary mt-2">${Number(price).toFixed(2)}</p>
+              </CardContent>
+            </Card>
+          </Link>
+        );
+      })}
     </div>
   );
 }
@@ -87,6 +112,7 @@ function ProductGridSkeleton() {
           <div className="aspect-square bg-surface" />
           <div className="p-4 space-y-2">
             <div className="h-4 bg-surface rounded w-3/4" />
+            <div className="h-3 bg-surface rounded w-full" />
             <div className="h-4 bg-surface rounded w-1/4" />
           </div>
         </div>
