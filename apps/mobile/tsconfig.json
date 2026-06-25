@@ -4,9 +4,22 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["src/**/*", "app/**/*", "**/*.ts", "**/*.tsx", "app.config.ts"],
-  "exclude": ["node_modules", ".expo"]
+  "include": [
+    "src/**/*",
+    "app/**/*",
+    "**/*.ts",
+    "**/*.tsx",
+    "app.config.ts",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".expo"
+  ]
 }
