@@ -165,7 +165,7 @@ export async function customerRoutes(fastify: FastifyInstance): Promise<void> {
     }
 
     const limit = query.limit ?? 50;
-    const offset = (query.page - 1) * limit;
+    const offset = ((query.page ?? 1) - 1) * limit;
 
     const customers = await db.query.customers.findMany({
       where: and(...conditions),

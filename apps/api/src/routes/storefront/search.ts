@@ -55,8 +55,8 @@ export async function searchRoutes(fastify: FastifyInstance): Promise<void> {
     const query = validateQuery(searchQuerySchema, request);
 
     const searchTerm = query.q.trim();
-    const page = query.page;
-    const limit = query.limit;
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 20;
     const offset = (page - 1) * limit;
 
     // Use full-text search with relevance ranking
